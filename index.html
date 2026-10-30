@@ -2,496 +2,547 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Математический тренажер 3 класс</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Математический тренажер</title>
     <style>
         :root {
-            --primary: #4CAF50;
-            --primary-dark: #388E3C;
-            --bg: #f0f4f8;
-            --card-bg: #ffffff;
-            --text: #333;
-            --border: #ccc;
-            --error: #f44336;
+            --bg-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --border-color: #bdc3c7;
+            --focus-color: #3498db;
+            --success-color: #27ae60;
+            --error-color: #e74c3c;
+            --btn-bg: #ecf0f1;
+            --btn-active: #d5dbdb;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            font-family: 'Georgia', serif; /* Классический шрифт для примеров */
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 20px 10px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
             user-select: none;
         }
 
-        .container {
-            background: var(--card-bg);
-            padding: 20px 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 800px;
+        .app-container {
             width: 100%;
-            box-sizing: border-box;
+            max-width: 700px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
 
         h1 {
+            font-family: 'Segoe UI', sans-serif;
             text-align: center;
-            color: var(--primary-dark);
-            margin-top: 0;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--text-color);
         }
 
-        /* Экран настройки */
+        /* --- Экран настройки --- */
         .setup-screen {
-            text-align: center;
-            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 40px 0;
         }
 
-        .setup-screen input {
-            font-size: 20px;
-            padding: 10px;
-            width: 80px;
-            text-align: center;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            margin: 0 10px;
-        }
-
-        button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 24px;
+        .setup-screen p {
+            font-family: 'Segoe UI', sans-serif;
             font-size: 18px;
+            margin: 0;
+        }
+
+        .count-input {
+            font-size: 24px;
+            width: 100px;
+            padding: 10px;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Georgia', serif;
+            outline: none;
+        }
+        .count-input:focus { border-color: var(--focus-color); }
+
+        .btn {
+            font-family: 'Segoe UI', sans-serif;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s, transform 0.1s;
-            margin: 5px;
+            transition: all 0.2s;
+            background-color: var(--text-color);
+            color: white;
         }
-
-        button:hover { background-color: var(--primary-dark); }
-        button:active { transform: scale(0.98); }
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-            transform: none;
+        .btn:active { transform: scale(0.98); }
+        .btn:disabled { background-color: #ccc; cursor: not-allowed; transform: none; }
+        
+        .btn-secondary {
+            background-color: var(--btn-bg);
+            color: var(--text-color);
         }
+        .btn-secondary:active { background-color: var(--btn-active); }
+        
+        .btn-danger { background-color: var(--error-color); }
 
-        .btn-danger { background-color: var(--error); }
-        .btn-danger:hover { background-color: #d32f2f; }
-        .btn-print { background-color: #2196F3; }
-        .btn-print:hover { background-color: #1976D2; }
-
-        /* Экран тренажера */
+        /* --- Экран тренажера --- */
         .trainer-screen { display: none; }
 
-        .controls {
+        .top-controls {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             margin-bottom: 20px;
-            flex-wrap: wrap;
             gap: 10px;
         }
 
-        .result-banner {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--primary-dark);
+        .status-banner {
+            font-family: 'Segoe UI', sans-serif;
             text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 24px;
             margin-bottom: 20px;
-            min-height: 28px;
         }
+        .status-success { color: var(--success-color); }
+        .status-error { color: var(--error-color); }
 
-        .examples-list {
-            display: flex;
-            flex-direction: column;
+        /* Сетка примеров (идеально ровная) */
+        .examples-grid {
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 20px;
+            margin-bottom: 120px; /* Место под нижнюю панель */
         }
 
-        .example-row {
+        .task-row {
             display: flex;
             align-items: flex-end;
-            font-size: 24px;
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: bold;
-            flex-wrap: wrap;
-            padding: 10px;
-            border-bottom: 1px dashed #eee;
+            justify-content: flex-start;
+            font-size: 26px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
         }
 
-        .math-part {
+        .math-block {
+            display: flex;
+            align-items: flex-end;
+            flex-wrap: nowrap;
+        }
+
+        /* Обертка для знака и поля над ним */
+        .symbol-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
+            justify-content: flex-end;
+            margin: 0 4px;
         }
 
         .intermediate-input {
-            width: 50px;
-            height: 25px;
+            width: 40px;
+            height: 24px;
             font-size: 16px;
             text-align: center;
-            border: 2px solid #ddd;
+            border: 1px solid #ddd;
             border-radius: 4px;
-            margin-bottom: 2px;
+            margin-bottom: 6px;
+            font-family: 'Segoe UI', sans-serif;
             background-color: #fafafa;
-            color: #666;
             outline: none;
+            padding: 0;
         }
-        .intermediate-input:focus { border-color: var(--primary); background-color: #fff;}
-
-        .symbol { margin: 0 5px; }
+        .intermediate-input:focus { border-color: var(--focus-color); background: #fff; }
         
+        /* Пустышка, если нет промежуточного поля (для ровности) */
+        .intermediate-spacer {
+            height: 24px;
+            margin-bottom: 6px;
+        }
+
+        .symbol-text {
+            font-size: 26px;
+            line-height: 1;
+            padding-bottom: 4px;
+        }
+
+        .number-text {
+            font-size: 26px;
+            line-height: 1;
+            padding-bottom: 4px;
+            margin: 0 4px;
+        }
+
+        .equals-sign {
+            font-size: 26px;
+            line-height: 1;
+            padding-bottom: 4px;
+            margin: 0 10px;
+        }
+
         .final-input {
-            width: 70px;
-            height: 35px;
+            width: 60px;
+            height: 36px;
             font-size: 22px;
             text-align: center;
-            border: 2px solid var(--border);
+            border: 2px solid var(--border-color);
             border-radius: 6px;
-            margin-left: 10px;
-            font-weight: bold;
+            font-family: 'Georgia', serif;
             outline: none;
+            margin-bottom: 2px;
         }
-        .final-input:focus { border-color: var(--primary); }
+        .final-input:focus { border-color: var(--focus-color); }
 
-        /* Экранная клавиатура */
-        .keyboard {
-            display: none;
-            margin-top: 30px;
-            background: #eef2f5;
-            padding: 15px;
-            border-radius: 12px;
+        /* --- Нижняя панель (Кнопка Проверить и Клавиатура) --- */
+        .bottom-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .check-btn {
             width: 100%;
             max-width: 400px;
+            font-size: 18px;
+            padding: 15px;
         }
-        
-        .keyboard-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+
+        /* Компактная клавиатура */
+        .keyboard {
+            display: none; /* Скрыта на десктопе */
+            width: 100%;
+            max-width: 400px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
         }
 
         .keyboard button {
-            font-size: 24px;
-            padding: 15px;
-            background: #fff;
-            color: var(--text);
-            border: 1px solid var(--border);
-            box-shadow: 0 2px 0 var(--border);
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 12px 0;
+            background: var(--btn-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 6px;
+            box-shadow: 0 2px 0 #ccc;
         }
-        .keyboard button:active {
-            transform: translateY(2px);
-            box-shadow: none;
-        }
-        .keyboard .btn-del {
-            background: #ffcdd2;
-            color: #c62828;
-            border-color: #ef9a9a;
-            box-shadow: 0 2px 0 #ef9a9a;
-        }
-        .keyboard .btn-clear {
-            grid-column: span 3;
-            background: #ffe0b2;
-            color: #e65100;
-            border-color: #ffcc80;
-            box-shadow: 0 2px 0 #ffcc80;
-        }
+        .keyboard button:active { transform: translateY(2px); box-shadow: none; }
+        
+        .keyboard .vk-delete { background: #ffeaa7; box-shadow: 0 2px 0 #fdcb6e; }
+        .keyboard .vk-clear { background: #ff7675; color: white; box-shadow: 0 2px 0 #d63031; }
 
-        /* Стили для печати (А4) */
+        /* --- Стили для ПЕЧАТИ (А4) --- */
         @media print {
             body { background: #fff; padding: 0; display: block; }
-            .container { box-shadow: none; padding: 0; max-width: 100%; }
-            .controls, .keyboard, .result-banner, .setup-screen, button, h1 { display: none !important; }
+            .app-container { box-shadow: none; padding: 0; max-width: 100%; border-radius: 0; }
+            h1 { font-size: 20px; margin-bottom: 20px; text-align: left; border-bottom: 2px solid #000; padding-bottom: 5px; }
+            .top-controls, .bottom-panel, .status-banner, .setup-screen { display: none !important; }
             .trainer-screen { display: block !important; }
-            .examples-list { gap: 40px; }
-            .example-row { border: none; font-size: 28px; page-break-inside: avoid; }
-            .intermediate-input, .final-input {
-                border: none !important;
-                background: transparent !important;
-                color: transparent !important;
-                border-bottom: 2px solid #000 !important;
-                border-radius: 0;
-                appearance: none;
+            
+            /* Печать в 2 колонки */
+            .examples-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 30px 40px;
+                margin-bottom: 0;
             }
-            .intermediate-input { display: none; } /* Промежуточные не печатаем */
-            .final-input { width: 100px; }
+            
+            .task-row {
+                border-bottom: none;
+                page-break-inside: avoid;
+                font-size: 22px; /* Чуть меньше для печати */
+                padding: 5px 0;
+            }
+            
+            .intermediate-input, .intermediate-spacer {
+                display: none !important; /* Скрываем поля промежуточных вычислений */
+            }
+            
+            .symbol-text, .number-text, .equals-sign {
+                font-size: 22px;
+                padding-bottom: 0;
+                line-height: 1.5;
+            }
+
+            .final-input {
+                border: none;
+                border-bottom: 2px solid #000;
+                border-radius: 0;
+                width: 60px;
+                height: 26px;
+                background: transparent;
+                color: transparent; /* Скрываем введенный текст */
+                font-size: 22px;
+            }
+        }
+
+        /* Медиа-запрос для планшетов/телефонов */
+        @media (max-width: 600px) {
+            .app-container { padding: 15px; }
+            .task-row { font-size: 22px; }
+            .symbol-text, .number-text, .equals-sign { font-size: 22px; }
+            .intermediate-input { width: 34px; height: 22px; font-size: 14px; margin-bottom: 4px; }
+            .intermediate-spacer { height: 22px; margin-bottom: 4px; }
+            .final-input { width: 55px; height: 32px; font-size: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Тренажер по математике</h1>
+    <div class="app-container">
+        <h1>Математика. Тренажер.</h1>
 
         <!-- Экран настройки -->
         <div class="setup-screen" id="setupScreen">
-            <p style="font-size: 18px; margin-bottom: 20px;">Сколько примеров сгенерировать?</p>
-            <input type="number" id="countInput" value="10" min="1" max="50">
-            <br><br>
-            <button onclick="startTraining()">Начать</button>
+            <p>Количество примеров:</p>
+            <input type="number" id="countInput" class="count-input" value="10" min="1" max="50">
+            <button class="btn" onclick="startTraining()">Сгенерировать</button>
         </div>
 
         <!-- Экран тренажера -->
         <div class="trainer-screen" id="trainerScreen">
-            <div class="controls">
-                <button class="btn-danger" onclick="resetTraining()">Сбросить (Новые примеры)</button>
-                <button class="btn-print" onclick="window.print()">Печать (А4)</button>
+            <div class="top-controls">
+                <button class="btn btn-danger" onclick="resetTraining()">Сбросить</button>
+                <button class="btn btn-secondary" onclick="window.print()">Печать (А4)</button>
             </div>
 
-            <div class="result-banner" id="resultBanner"></div>
+            <div class="status-banner" id="statusBanner"></div>
 
-            <div class="examples-list" id="examplesList">
-                <!-- Сюда будут вставляться примеры -->
-            </div>
-
-            <div style="text-align: center; margin-top: 30px;">
-                <button id="checkBtn" onclick="checkAnswers()" disabled style="font-size: 22px; padding: 15px 40px;">Проверить</button>
-            </div>
-        </div>
-
-        <!-- Экранная клавиатура -->
-        <div class="keyboard" id="virtualKeyboard">
-            <div class="keyboard-grid">
-                <button onclick="vkInput('1')">1</button>
-                <button onclick="vkInput('2')">2</button>
-                <button onclick="vkInput('3')">3</button>
-                <button onclick="vkInput('4')">4</button>
-                <button onclick="vkInput('5')">5</button>
-                <button onclick="vkInput('6')">6</button>
-                <button onclick="vkInput('7')">7</button>
-                <button onclick="vkInput('8')">8</button>
-                <button onclick="vkInput('9')">9</button>
-                <button onclick="vkInput('0')" style="grid-column: span 2;">0</button>
-                <button class="btn-del" onclick="vkDelete()">⌫</button>
+            <div class="examples-grid" id="examplesGrid">
+                <!-- Примеры генерируются тут -->
             </div>
         </div>
     </div>
 
-    <script>
-        // Глобальные переменные состояния
-        let tasks = []; // Массив объектов с примерами
-        let activeInput = null; // Текущее активное поле ввода
-        const LS_KEY = 'math_trainer_state_v1';
+    <!-- Нижняя панель -->
+    <div class="bottom-panel" id="bottomPanel" style="display: none;">
+        <button class="btn check-btn" id="checkBtn" onclick="checkAnswers()" disabled>Проверить</button>
+        
+        <!-- Экранная клавиатура -->
+        <div class="keyboard" id="virtualKeyboard">
+            <button onclick="vkInput('1')">1</button>
+            <button onclick="vkInput('2')">2</button>
+            <button onclick="vkInput('3')">3</button>
+            <button onclick="vkInput('4')">4</button>
+            <button onclick="vkInput('5')">5</button>
+            <button onclick="vkInput('6')">6</button>
+            <button onclick="vkInput('7')">7</button>
+            <button onclick="vkInput('8')">8</button>
+            <button onclick="vkInput('9')">9</button>
+            <button onclick="vkInput('0')">0</button>
+            <button class="vk-delete" onclick="vkDelete()">⌫</button>
+            <button class="vk-clear" onclick="vkClear()" style="grid-column: span 4;">Очистить</button>
+        </div>
+    </div>
 
-        // Инициализация
+    <script>
+        let tasks = [];
+        let activeInput = null;
+        const LS_KEY = 'math_trainer_v2';
+
         window.onload = function() {
             loadState();
-            if (tasks.length > 0) {
-                document.getElementById('setupScreen').style.display = 'none';
-                document.getElementById('trainerScreen').style.display = 'block';
-                renderTasks();
-            }
-            // Показываем клавиатуру на тач-устройствах
+            
+            // Показываем клавиатуру только на сенсорных экранах
             if ('ontouchstart' in window) {
-                document.getElementById('virtualKeyboard').style.display = 'block';
+                document.getElementById('virtualKeyboard').style.display = 'grid';
+            }
+
+            if (tasks.length > 0) {
+                showTrainer();
             }
         };
 
-        // --- Генератор примеров ---
-        
         function randomInt(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        // Генерирует один пример и возвращает объект с деревом вычислений
+        // --- Логика генерации ---
         function generateTask() {
-            // Выбираем тип примера
-            const types = ['simple', 'brackets', 'mixed'];
+            const types = ['mul', 'div', 'brackets', 'brackets_div', 'trap'];
             const type = types[randomInt(0, types.length - 1)];
             
-            let expression = []; // Массив токенов для рендера
-            let steps = []; // Эталонные промежуточные значения по порядку
+            let expression = []; 
+            let steps = []; 
 
-            if (type === 'simple') {
-                // Простые: a * b, a : b, a * 1, a * 0, a : 1
-                let a, b, op;
-                const subType = randomInt(1, 4);
-                if (subType === 1) { // Умножение
-                    a = randomInt(2, 9); b = randomInt(2, 9); op = '×';
-                } else if (subType === 2) { // Деление
-                    b = randomInt(2, 9); let res = randomInt(2, 9); a = b * res; op = ':';
-                } else if (subType === 3) { // Умножение на 1
-                    a = randomInt(10, 99); b = 1; op = '×';
-                } else { // Умножение на 0
-                    a = randomInt(10, 99); b = 0; op = '×';
-                }
-                expression = [{num: a}, {sym: op, stepIdx: 0}, {num: b}];
-                let res = op === '×' ? a * b : a / b;
+            if (type === 'mul') {
+                let a = randomInt(2, 9), b = randomInt(2, 9);
+                expression = [{num: a}, {sym: '×', step: 0}, {num: b}];
+                steps.push(a * b);
+            } 
+            else if (type === 'div') {
+                let b = randomInt(2, 9), res = randomInt(2, 9), a = b * res;
+                expression = [{num: a}, {sym: ':', step: 0}, {num: b}];
                 steps.push(res);
-                
-            } else if (type === 'brackets') {
-                // Со скобками: (a + b) * c, (a - b) : c
+            }
+            else if (type === 'brackets') {
                 let a = randomInt(10, 50), b = randomInt(1, 9);
                 if (a < b) [a, b] = [b, a];
-                let op1 = randomInt(0,1) === 0 ? '+' : '-';
-                let res1 = op1 === '+' ? a + b : a - b;
-                
-                // Для деления подбираем так, чтобы делилось без остатка
-                let c, op2, finalRes;
-                if (randomInt(0, 1) === 0) {
-                    c = randomInt(2, 9); op2 = '×'; finalRes = res1 * c;
-                } else {
-                    // Ищем делитель
-                    let divisors = [];
-                    for(let i=2; i<=9; i++) if(res1 % i === 0) divisors.push(i);
-                    if(divisors.length > 0) {
-                        c = divisors[randomInt(0, divisors.length-1)]; op2 = ':'; finalRes = res1 / c;
-                    } else {
-                        c = 2; op2 = '×'; finalRes = res1 * c; // fallback
-                    }
-                }
+                let isPlus = randomInt(0, 1) === 1;
+                let op1 = isPlus ? '+' : '-';
+                let res1 = isPlus ? a + b : a - b;
+                let c = randomInt(2, 5);
                 
                 expression = [
-                    {sym: '(', stepIdx: null},
-                    {num: a}, 
-                    {sym: op1, stepIdx: 0}, 
-                    {num: b}, 
-                    {sym: ')', stepIdx: null},
-                    {sym: op2, stepIdx: 1},
-                    {num: c}
+                    {sym: '(', step: null},
+                    {num: a}, {sym: op1, step: 0}, {num: b}, {sym: ')', step: null},
+                    {sym: '×', step: 1}, {num: c}
                 ];
-                steps.push(res1, finalRes);
-
-            } else {
-                // Смешанные (ловушки с 0 и 1): a * 1 + b * 0
-                let a = randomInt(10, 50), b = randomInt(10, 50);
-                let op1 = '×', op2 = '+', op3 = '×';
-                let c = 1, d = 0;
-                if (randomInt(0,1) === 0) {
-                    // a * 1 + b * 0
-                } else {
-                    // a * 0 + b * 1
-                    [c, d] = [d, c];
-                }
-                
-                expression = [
-                    {num: a}, {sym: op1, stepIdx: 0}, {num: c},
-                    {sym: op2, stepIdx: 2},
-                    {num: b}, {sym: op3, stepIdx: 1}, {num: d}
-                ];
-                // Порядок вычислений: сначала умножения, потом сложение
-                steps[0] = a * c; // Шаг 1 (первое умножение)
-                steps[1] = b * d; // Шаг 2 (второе умножение)
-                steps[2] = steps[0] + steps[1]; // Шаг 3 (сложение)
+                steps.push(res1, res1 * c);
             }
+            else if (type === 'brackets_div') {
+                let a = randomInt(20, 80), b = randomInt(1, 9);
+                if (a < b) [a, b] = [b, a];
+                let op1 = '-';
+                let res1 = a - b;
+                
+                let divisors = [];
+                for(let i=2; i<=9; i++) if(res1 % i === 0) divisors.push(i);
+                let c = divisors.length > 0 ? divisors[randomInt(0, divisors.length-1)] : 2;
+                if (divisors.length === 0) res1 = c * randomInt(2,9); // Fallback
 
-            // Собираем финальный ответ
-            let finalAnswer = steps[steps.length - 1];
+                expression = [
+                    {sym: '(', step: null},
+                    {num: a}, {sym: op1, step: 0}, {num: b}, {sym: ')', step: null},
+                    {sym: ':', step: 1}, {num: c}
+                ];
+                steps.push(res1, res1 / c);
+            }
+            else if (type === 'trap') {
+                let a = randomInt(10, 50), b = randomInt(10, 50);
+                let c = randomInt(0, 1) === 1 ? 1 : 0;
+                let d = c === 1 ? 0 : 1;
+                let op = randomInt(0, 1) === 1 ? '+' : '-';
+                
+                expression = [
+                    {num: a}, {sym: '×', step: 0}, {num: c},
+                    {sym: op, step: 2},
+                    {num: b}, {sym: '×', step: 1}, {num: d}
+                ];
+                steps[0] = a * c;
+                steps[1] = b * d;
+                steps[2] = op === '+' ? steps[0] + steps[1] : steps[0] - steps[1];
+            }
 
             return {
                 expression: expression,
                 steps: steps,
-                finalAnswer: finalAnswer,
+                finalAnswer: steps[steps.length - 1],
                 userSteps: new Array(steps.length).fill(''),
                 userFinal: ''
             };
         }
 
-        // --- Управление состоянием и интерфейсом ---
-
+        // --- Управление ---
         function startTraining() {
             const count = parseInt(document.getElementById('countInput').value);
-            if (isNaN(count) || count < 1 || count > 50) {
-                alert('Пожалуйста, введите число от 1 до 50');
-                return;
-            }
+            if (isNaN(count) || count < 1 || count > 50) return alert('Введите число от 1 до 50');
 
             tasks = [];
-            for (let i = 0; i < count; i++) {
-                tasks.push(generateTask());
-            }
-
-            document.getElementById('setupScreen').style.display = 'none';
-            document.getElementById('trainerScreen').style.display = 'block';
+            for (let i = 0; i < count; i++) tasks.push(generateTask());
             
             saveState();
+            showTrainer();
+        }
+
+        function showTrainer() {
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('trainerScreen').style.display = 'block';
+            document.getElementById('bottomPanel').style.display = 'flex';
             renderTasks();
         }
 
         function renderTasks() {
-            const list = document.getElementById('examplesList');
-            list.innerHTML = '';
+            const grid = document.getElementById('examplesGrid');
+            grid.innerHTML = '';
             
             tasks.forEach((task, tIdx) => {
                 const row = document.createElement('div');
-                row.className = 'example-row';
+                row.className = 'task-row';
+                const mathBlock = document.createElement('div');
+                mathBlock.className = 'math-block';
 
-                // Рендерим математическое выражение с полями ввода
-                task.expression.forEach((token, eIdx) => {
+                task.expression.forEach(token => {
                     if (token.sym) {
-                        // Знак действия
-                        const symDiv = document.createElement('div');
-                        symDiv.className = 'math-part';
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'symbol-wrapper';
                         
-                        if (token.stepIdx !== null) {
-                            // Если это знак действия, над которым нужно поле
+                        if (token.step !== null) {
                             const input = document.createElement('input');
                             input.type = 'text';
                             input.inputMode = 'numeric';
                             input.className = 'intermediate-input';
-                            input.dataset.task = tIdx;
-                            input.dataset.step = token.stepIdx;
-                            input.value = task.userSteps[token.stepIdx] || '';
+                            input.value = task.userSteps[token.step] || '';
                             
-                            // Слушатели для сохранения и активации кнопки
-                            input.addEventListener('input', (e) => handleInput(e, 'step', tIdx, token.stepIdx));
+                            input.addEventListener('input', (e) => handleInput(e, 'step', tIdx, token.step));
                             input.addEventListener('focus', (e) => activeInput = e.target);
-                            
-                            symDiv.appendChild(input);
+                            wrapper.appendChild(input);
                         } else {
-                            // Просто текст (скобки)
                             const spacer = document.createElement('div');
-                            spacer.style.height = '27px'; // для выравнивания
-                            symDiv.appendChild(spacer);
+                            spacer.className = 'intermediate-spacer';
+                            wrapper.appendChild(spacer);
                         }
                         
                         const symText = document.createElement('span');
-                        symText.className = 'symbol';
+                        symText.className = 'symbol-text';
                         symText.textContent = token.sym;
-                        symDiv.appendChild(symText);
-                        
-                        row.appendChild(symDiv);
+                        wrapper.appendChild(symText);
+                        mathBlock.appendChild(wrapper);
                     } else {
-                        // Число
-                        const numSpan = document.createElement('span');
-                        numSpan.className = 'symbol';
-                        numSpan.textContent = token.num;
-                        row.appendChild(numSpan);
+                        const num = document.createElement('span');
+                        num.className = 'number-text';
+                        num.textContent = token.num;
+                        mathBlock.appendChild(num);
                     }
                 });
 
-                // Знак равно
-                const eqSpan = document.createElement('span');
-                eqSpan.className = 'symbol';
-                eqSpan.textContent = '=';
-                eqSpan.style.marginLeft = '10px';
-                row.appendChild(eqSpan);
+                const eq = document.createElement('span');
+                eq.className = 'equals-sign';
+                eq.textContent = '=';
+                mathBlock.appendChild(eq);
 
-                // Финальное поле ответа
-                const finalInput = document.createElement('input');
-                finalInput.type = 'text';
-                finalInput.inputMode = 'numeric';
-                finalInput.className = 'final-input';
-                finalInput.dataset.task = tIdx;
-                finalInput.value = task.userFinal || '';
-                
-                finalInput.addEventListener('input', (e) => handleInput(e, 'final', tIdx));
-                finalInput.addEventListener('focus', (e) => activeInput = e.target);
-                
-                row.appendChild(finalInput);
-                list.appendChild(row);
+                const finalInp = document.createElement('input');
+                finalInp.type = 'text';
+                finalInp.inputMode = 'numeric';
+                finalInp.className = 'final-input';
+                finalInp.value = task.userFinal || '';
+                finalInp.addEventListener('input', (e) => handleInput(e, 'final', tIdx));
+                finalInp.addEventListener('focus', (e) => activeInput = e.target);
+                mathBlock.appendChild(finalInp);
+
+                row.appendChild(mathBlock);
+                grid.appendChild(row);
             });
 
-            updateCheckButton();
+            updateCheckBtn();
         }
 
         function handleInput(e, type, tIdx, stepIdx = null) {
-            // Очистка от нецифровых символов
             let val = e.target.value.replace(/[^0-9]/g, '');
             if (val !== e.target.value) e.target.value = val;
 
@@ -502,109 +553,79 @@
             }
             
             saveState();
-            updateCheckButton();
-            // Убираем баннер при изменении
-            document.getElementById('resultBanner').textContent = '';
+            updateCheckBtn();
+            document.getElementById('statusBanner').textContent = '';
         }
 
-        function updateCheckButton() {
-            // Кнопка активна, если ВСЕ финальные ответы заполнены
+        function updateCheckBtn() {
             const allFilled = tasks.every(t => t.userFinal.trim() !== '');
             document.getElementById('checkBtn').disabled = !allFilled;
         }
 
         function checkAnswers() {
-            let correctCount = 0;
-
+            let correct = 0;
             tasks.forEach(task => {
-                let isCorrect = true;
+                let isOk = true;
+                if (parseInt(task.userFinal) !== task.finalAnswer) isOk = false;
                 
-                // Проверяем финальный ответ
-                if (parseInt(task.userFinal) !== task.finalAnswer) {
-                    isCorrect = false;
-                }
-
-                // Проверяем промежуточные, ТОЛЬКО если они заполнены
-                task.steps.forEach((stepAnswer, idx) => {
-                    const userVal = task.userSteps[idx].trim();
-                    if (userVal !== '') {
-                        if (parseInt(userVal) !== stepAnswer) {
-                            isCorrect = false;
-                        }
-                    }
+                task.steps.forEach((ans, idx) => {
+                    let uVal = task.userSteps[idx].trim();
+                    if (uVal !== '' && parseInt(uVal) !== ans) isOk = false;
                 });
-
-                if (isCorrect) correctCount++;
+                if (isOk) correct++;
             });
 
-            const banner = document.getElementById('resultBanner');
-            if (correctCount === tasks.length) {
-                banner.style.color = 'var(--primary-dark)';
-                banner.textContent = `🎉 Отлично! Все ${tasks.length} примеров решены верно!`;
+            const banner = document.getElementById('statusBanner');
+            if (correct === tasks.length) {
+                banner.className = 'status-banner status-success';
+                banner.textContent = `Все ${tasks.length} примеров решены верно!`;
             } else {
-                banner.style.color = '#d32f2f';
-                banner.textContent = `Правильно решено: ${correctCount} из ${tasks.length}. Найди ошибки и попробуй еще раз!`;
+                banner.className = 'status-banner status-error';
+                banner.textContent = `Верно: ${correct} из ${tasks.length}. Ищи ошибки!`;
             }
         }
 
         function resetTraining() {
-            if (confirm('Вы уверены, что хотите сбросить все примеры? Введенные ответы будут потеряны.')) {
+            if (confirm('Сбросить все примеры и начать заново?')) {
                 tasks = [];
                 localStorage.removeItem(LS_KEY);
                 document.getElementById('trainerScreen').style.display = 'none';
-                document.getElementById('setupScreen').style.display = 'block';
-                document.getElementById('resultBanner').textContent = '';
+                document.getElementById('bottomPanel').style.display = 'none';
+                document.getElementById('setupScreen').style.display = 'flex';
+                document.getElementById('statusBanner').textContent = '';
+                activeInput = null;
             }
         }
 
-        // --- Сохранение в LocalStorage ---
-
-        function saveState() {
-            localStorage.setItem(LS_KEY, JSON.stringify(tasks));
-        }
-
+        function saveState() { localStorage.setItem(LS_KEY, JSON.stringify(tasks)); }
         function loadState() {
             const saved = localStorage.getItem(LS_KEY);
-            if (saved) {
-                try {
-                    tasks = JSON.parse(saved);
-                } catch (e) {
-                    tasks = [];
-                }
-            }
+            if (saved) { try { tasks = JSON.parse(saved); } catch(e) { tasks = []; } }
         }
 
-        // --- Экранная клавиатура ---
-
+        // --- Клавиатура ---
         function vkInput(num) {
-            if (!activeInput) return;
-            // Если поле уже не в фокусе (например, кликнули на кнопку), проверяем, что оно все еще в DOM
-            if (!document.body.contains(activeInput)) return;
-            
-            // Ограничиваем длину ввода (максимум 3 цифры)
+            if (!activeInput || !document.body.contains(activeInput)) return;
             if (activeInput.value.length < 3) {
                 activeInput.value += num;
-                // Вызываем событие input вручную, чтобы сработали обработчики
                 activeInput.dispatchEvent(new Event('input', { bubbles: true }));
             }
         }
 
         function vkDelete() {
-            if (!activeInput) return;
-            if (!document.body.contains(activeInput)) return;
-
+            if (!activeInput || !document.body.contains(activeInput)) return;
             activeInput.value = activeInput.value.slice(0, -1);
             activeInput.dispatchEvent(new Event('input', { bubbles: true }));
         }
 
-        // Предотвращаем закрытие клавиатуры при клике на кнопки клавиатуры
-        document.getElementById('virtualKeyboard').addEventListener('mousedown', (e) => {
-            e.preventDefault(); 
-        });
-        document.getElementById('virtualKeyboard').addEventListener('touchstart', (e) => {
-            e.preventDefault(); 
-        }, {passive: false});
+        function vkClear() {
+            if (!activeInput || !document.body.contains(activeInput)) return;
+            activeInput.value = '';
+            activeInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
 
+        document.getElementById('virtualKeyboard').addEventListener('mousedown', e => e.preventDefault());
+        document.getElementById('virtualKeyboard').addEventListener('touchstart', e => e.preventDefault(), {passive: false});
     </script>
 </body>
 </html>
