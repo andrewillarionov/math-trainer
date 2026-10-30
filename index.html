@@ -7,13 +7,12 @@
     <style>
         :root {
             --bg-color: #f8f9fa;
-            --text-color: #2c3e50;
-            --border-color: #bdc3c7;
-            --focus-color: #3498db;
+            --text-color: #1a1a1a;
+            --border-color: #999;
+            --focus-color: #2c3e50;
             --success-color: #27ae60;
             --error-color: #e74c3c;
-            --btn-bg: #ecf0f1;
-            --btn-active: #d5dbdb;
+            --btn-bg: #e9ecef;
         }
 
         * {
@@ -22,11 +21,12 @@
         }
 
         body {
-            font-family: 'Georgia', serif; /* Классический шрифт для примеров */
+            /* Шрифт как в тетради */
+            font-family: 'Times New Roman', Times, serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px 10px;
+            padding: 15px 10px;
             display: flex;
             justify-content: center;
             min-height: 100vh;
@@ -35,20 +35,21 @@
 
         .app-container {
             width: 100%;
-            max-width: 700px;
+            max-width: 600px; /* Чуть уже для удобства */
             background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         h1 {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif; /* Заголовок оставим без засечек для современности */
             text-align: center;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 600;
-            margin-bottom: 30px;
-            color: var(--text-color);
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
         }
 
         /* --- Экран настройки --- */
@@ -56,38 +57,39 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
-            padding: 40px 0;
+            gap: 15px;
+            padding: 30px 0;
         }
 
         .setup-screen p {
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 18px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 16px;
             margin: 0;
+            color: #555;
         }
 
         .count-input {
             font-size: 24px;
-            width: 100px;
-            padding: 10px;
+            width: 90px;
+            padding: 8px;
             text-align: center;
             border: 2px solid var(--border-color);
-            border-radius: 8px;
-            font-family: 'Georgia', serif;
+            border-radius: 6px;
+            font-family: 'Times New Roman', Times, serif;
             outline: none;
         }
         .count-input:focus { border-color: var(--focus-color); }
 
         .btn {
-            font-family: 'Segoe UI', sans-serif;
-            padding: 12px 24px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            padding: 10px 20px;
             font-size: 16px;
             font-weight: 600;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
-            background-color: var(--text-color);
+            background-color: #333;
             color: white;
         }
         .btn:active { transform: scale(0.98); }
@@ -95,10 +97,8 @@
         
         .btn-secondary {
             background-color: var(--btn-bg);
-            color: var(--text-color);
+            color: #333;
         }
-        .btn-secondary:active { background-color: var(--btn-active); }
-        
         .btn-danger { background-color: var(--error-color); }
 
         /* --- Экран тренажера --- */
@@ -112,31 +112,29 @@
         }
 
         .status-banner {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             text-align: center;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            min-height: 24px;
-            margin-bottom: 20px;
+            min-height: 22px;
+            margin-bottom: 15px;
         }
         .status-success { color: var(--success-color); }
         .status-error { color: var(--error-color); }
 
-        /* Сетка примеров (идеально ровная) */
         .examples-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 20px;
-            margin-bottom: 120px; /* Место под нижнюю панель */
+            gap: 15px;
+            margin-bottom: 80px; /* Место под нижнюю кнопку */
         }
 
         .task-row {
             display: flex;
             align-items: flex-end;
             justify-content: flex-start;
-            font-size: 26px;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
+            padding: 8px 0;
+            border-bottom: 1px dashed #ccc;
         }
 
         .math-block {
@@ -145,116 +143,79 @@
             flex-wrap: nowrap;
         }
 
-        /* Обертка для знака и поля над ним */
         .symbol-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            margin: 0 4px;
+            margin: 0 2px;
         }
 
         .intermediate-input {
-            width: 40px;
-            height: 24px;
+            width: 38px;
+            height: 22px;
             font-size: 16px;
             text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 6px;
-            font-family: 'Segoe UI', sans-serif;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-bottom: 4px;
+            font-family: 'Times New Roman', Times, serif;
             background-color: #fafafa;
             outline: none;
             padding: 0;
+            color: #555;
         }
         .intermediate-input:focus { border-color: var(--focus-color); background: #fff; }
         
-        /* Пустышка, если нет промежуточного поля (для ровности) */
         .intermediate-spacer {
-            height: 24px;
-            margin-bottom: 6px;
+            height: 22px;
+            margin-bottom: 4px;
         }
 
-        .symbol-text {
-            font-size: 26px;
+        /* Размер шрифта для чисел и знаков */
+        .symbol-text, .number-text, .equals-sign {
+            font-size: 28px; 
             line-height: 1;
-            padding-bottom: 4px;
+            padding-bottom: 2px;
+            font-family: 'Times New Roman', Times, serif;
         }
 
-        .number-text {
-            font-size: 26px;
-            line-height: 1;
-            padding-bottom: 4px;
-            margin: 0 4px;
-        }
-
-        .equals-sign {
-            font-size: 26px;
-            line-height: 1;
-            padding-bottom: 4px;
-            margin: 0 10px;
-        }
+        .number-text { margin: 0 2px; }
+        .equals-sign { margin: 0 8px; }
 
         .final-input {
-            width: 60px;
-            height: 36px;
-            font-size: 22px;
+            width: 55px;
+            height: 34px;
+            font-size: 24px;
             text-align: center;
             border: 2px solid var(--border-color);
-            border-radius: 6px;
-            font-family: 'Georgia', serif;
+            border-radius: 4px;
+            font-family: 'Times New Roman', Times, serif;
             outline: none;
-            margin-bottom: 2px;
+            margin-bottom: 0;
         }
         .final-input:focus { border-color: var(--focus-color); }
 
-        /* --- Нижняя панель (Кнопка Проверить и Клавиатура) --- */
+        /* --- Нижняя панель --- */
         .bottom-panel {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background: #fff;
-            box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
-            padding: 10px 20px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+            padding: 12px 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+            justify-content: center;
             z-index: 10;
         }
 
         .check-btn {
             width: 100%;
-            max-width: 400px;
+            max-width: 350px;
             font-size: 18px;
-            padding: 15px;
+            padding: 12px;
         }
-
-        /* Компактная клавиатура */
-        .keyboard {
-            display: none; /* Скрыта на десктопе */
-            width: 100%;
-            max-width: 400px;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 6px;
-        }
-
-        .keyboard button {
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 20px;
-            font-weight: 600;
-            padding: 12px 0;
-            background: var(--btn-bg);
-            color: var(--text-color);
-            border: none;
-            border-radius: 6px;
-            box-shadow: 0 2px 0 #ccc;
-        }
-        .keyboard button:active { transform: translateY(2px); box-shadow: none; }
-        
-        .keyboard .vk-delete { background: #ffeaa7; box-shadow: 0 2px 0 #fdcb6e; }
-        .keyboard .vk-clear { background: #ff7675; color: white; box-shadow: 0 2px 0 #d63031; }
 
         /* --- Стили для ПЕЧАТИ (А4) --- */
         @media print {
@@ -264,51 +225,47 @@
             .top-controls, .bottom-panel, .status-banner, .setup-screen { display: none !important; }
             .trainer-screen { display: block !important; }
             
-            /* Печать в 2 колонки */
             .examples-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 30px 40px;
+                gap: 25px 40px;
                 margin-bottom: 0;
             }
             
             .task-row {
                 border-bottom: none;
                 page-break-inside: avoid;
-                font-size: 22px; /* Чуть меньше для печати */
                 padding: 5px 0;
             }
             
             .intermediate-input, .intermediate-spacer {
-                display: none !important; /* Скрываем поля промежуточных вычислений */
+                display: none !important;
             }
             
             .symbol-text, .number-text, .equals-sign {
-                font-size: 22px;
+                font-size: 24px;
                 padding-bottom: 0;
-                line-height: 1.5;
+                font-family: 'Times New Roman', Times, serif;
             }
 
             .final-input {
                 border: none;
-                border-bottom: 2px solid #000;
+                border-bottom: 1.5px solid #000;
                 border-radius: 0;
-                width: 60px;
-                height: 26px;
+                width: 50px;
+                height: 24px;
                 background: transparent;
-                color: transparent; /* Скрываем введенный текст */
-                font-size: 22px;
+                color: transparent; /* Скрываем текст при печати */
+                font-size: 24px;
             }
         }
 
-        /* Медиа-запрос для планшетов/телефонов */
         @media (max-width: 600px) {
             .app-container { padding: 15px; }
-            .task-row { font-size: 22px; }
-            .symbol-text, .number-text, .equals-sign { font-size: 22px; }
-            .intermediate-input { width: 34px; height: 22px; font-size: 14px; margin-bottom: 4px; }
-            .intermediate-spacer { height: 22px; margin-bottom: 4px; }
-            .final-input { width: 55px; height: 32px; font-size: 20px; }
+            .symbol-text, .number-text, .equals-sign { font-size: 24px; }
+            .intermediate-input { width: 32px; height: 20px; font-size: 14px; }
+            .intermediate-spacer { height: 20px; }
+            .final-input { width: 50px; height: 30px; font-size: 22px; }
         }
     </style>
 </head>
@@ -317,14 +274,12 @@
     <div class="app-container">
         <h1>Математика. Тренажер.</h1>
 
-        <!-- Экран настройки -->
         <div class="setup-screen" id="setupScreen">
             <p>Количество примеров:</p>
             <input type="number" id="countInput" class="count-input" value="10" min="1" max="50">
             <button class="btn" onclick="startTraining()">Сгенерировать</button>
         </div>
 
-        <!-- Экран тренажера -->
         <div class="trainer-screen" id="trainerScreen">
             <div class="top-controls">
                 <button class="btn btn-danger" onclick="resetTraining()">Сбросить</button>
@@ -333,46 +288,21 @@
 
             <div class="status-banner" id="statusBanner"></div>
 
-            <div class="examples-grid" id="examplesGrid">
-                <!-- Примеры генерируются тут -->
-            </div>
+            <div class="examples-grid" id="examplesGrid"></div>
         </div>
     </div>
 
-    <!-- Нижняя панель -->
     <div class="bottom-panel" id="bottomPanel" style="display: none;">
         <button class="btn check-btn" id="checkBtn" onclick="checkAnswers()" disabled>Проверить</button>
-        
-        <!-- Экранная клавиатура -->
-        <div class="keyboard" id="virtualKeyboard">
-            <button onclick="vkInput('1')">1</button>
-            <button onclick="vkInput('2')">2</button>
-            <button onclick="vkInput('3')">3</button>
-            <button onclick="vkInput('4')">4</button>
-            <button onclick="vkInput('5')">5</button>
-            <button onclick="vkInput('6')">6</button>
-            <button onclick="vkInput('7')">7</button>
-            <button onclick="vkInput('8')">8</button>
-            <button onclick="vkInput('9')">9</button>
-            <button onclick="vkInput('0')">0</button>
-            <button class="vk-delete" onclick="vkDelete()">⌫</button>
-            <button class="vk-clear" onclick="vkClear()" style="grid-column: span 4;">Очистить</button>
-        </div>
     </div>
 
     <script>
         let tasks = [];
         let activeInput = null;
-        const LS_KEY = 'math_trainer_v2';
+        const LS_KEY = 'math_trainer_v3';
 
         window.onload = function() {
             loadState();
-            
-            // Показываем клавиатуру только на сенсорных экранах
-            if ('ontouchstart' in window) {
-                document.getElementById('virtualKeyboard').style.display = 'grid';
-            }
-
             if (tasks.length > 0) {
                 showTrainer();
             }
@@ -382,7 +312,6 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        // --- Логика генерации ---
         function generateTask() {
             const types = ['mul', 'div', 'brackets', 'brackets_div', 'trap'];
             const type = types[randomInt(0, types.length - 1)];
@@ -424,7 +353,7 @@
                 let divisors = [];
                 for(let i=2; i<=9; i++) if(res1 % i === 0) divisors.push(i);
                 let c = divisors.length > 0 ? divisors[randomInt(0, divisors.length-1)] : 2;
-                if (divisors.length === 0) res1 = c * randomInt(2,9); // Fallback
+                if (divisors.length === 0) res1 = c * randomInt(2,9);
 
                 expression = [
                     {sym: '(', step: null},
@@ -458,7 +387,6 @@
             };
         }
 
-        // --- Управление ---
         function startTraining() {
             const count = parseInt(document.getElementById('countInput').value);
             if (isNaN(count) || count < 1 || count > 50) return alert('Введите число от 1 до 50');
@@ -602,30 +530,6 @@
             const saved = localStorage.getItem(LS_KEY);
             if (saved) { try { tasks = JSON.parse(saved); } catch(e) { tasks = []; } }
         }
-
-        // --- Клавиатура ---
-        function vkInput(num) {
-            if (!activeInput || !document.body.contains(activeInput)) return;
-            if (activeInput.value.length < 3) {
-                activeInput.value += num;
-                activeInput.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-        }
-
-        function vkDelete() {
-            if (!activeInput || !document.body.contains(activeInput)) return;
-            activeInput.value = activeInput.value.slice(0, -1);
-            activeInput.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-
-        function vkClear() {
-            if (!activeInput || !document.body.contains(activeInput)) return;
-            activeInput.value = '';
-            activeInput.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-
-        document.getElementById('virtualKeyboard').addEventListener('mousedown', e => e.preventDefault());
-        document.getElementById('virtualKeyboard').addEventListener('touchstart', e => e.preventDefault(), {passive: false});
     </script>
 </body>
 </html>
